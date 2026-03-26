@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer Roadmap — 6 Months</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --border: #1e1e1e;
+    --accent: #e8ff3a;
+    --text: #e8e8e8;
+    --muted: #555;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; line-height: 1.6; overflow-x: hidden; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.4;
+  }
+
+  header {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 4rem 2rem; position: relative; overflow: hidden; border-bottom: 1px solid var(--border);
+  }
+  header::before {
+    content: ''; position: absolute; top: -30%; right: -10%; width: 60vw; height: 60vw;
+    background: radial-gradient(circle, rgba(232,255,58,0.06) 0%, transparent 70%); pointer-events: none;
+  }
+  header::after {
+    content: ''; position: absolute; bottom: -20%; left: -10%; width: 40vw; height: 40vw;
+    background: radial-gradient(circle, rgba(58,245,255,0.05) 0%, transparent 70%); pointer-events: none;
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; width: 100%; }
+  .tag { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(232,255,58,0.3); display: inline-block; padding: 0.3rem 0.8rem; margin-bottom: 2rem; animation: fadeIn 0.6s ease forwards; }
+  h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem; animation: slideUp 0.8s ease forwards; }
+  h1 span { display: block; color: var(--accent); font-style: italic; }
+  .header-desc { font-size: 1.1rem; color: #888; max-width: 540px; margin-bottom: 3rem; font-weight: 400; animation: fadeIn 1s ease 0.3s forwards; opacity: 0; }
+  .header-stats { display: flex; gap: 3rem; flex-wrap: wrap; animation: fadeIn 1s ease 0.5s forwards; opacity: 0; }
+  .stat { display: flex; flex-direction: column; gap: 0.2rem; }
+  .stat-num { font-size: 2.2rem; font-weight: 800; color: var(--accent); line-height: 1; }
+  .stat-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; animation: bounce 2s ease infinite; }
+  .scroll-hint::after { content: '↓'; font-size: 1.2rem; }
+
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 2rem; overflow-x: auto; }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; }
+  .nav-link { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 1rem 1rem; white-space: nowrap; border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .nav-link:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+  .month { padding: 5rem 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .month.visible { opacity: 1; transform: translateY(0); }
+  .month-header { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; margin-bottom: 3rem; }
+  .month-num { font-family: 'Space Mono', monospace; font-size: 6rem; font-weight: 700; line-height: 1; opacity: 0.12; letter-spacing: -0.05em; user-select: none; color: var(--mc); }
+  .month-meta { padding-top: 0.5rem; }
+  .month-badge { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 2px; margin-bottom: 0.8rem; display: inline-block; font-weight: 700; background: color-mix(in srgb, var(--mc) 10%, transparent); border: 1px solid color-mix(in srgb, var(--mc) 30%, transparent); color: var(--mc); }
+  .month-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 0.8rem; }
+  .month-goal { font-size: 0.95rem; color: #777; font-family: 'Space Mono', monospace; font-style: italic; border-left: 2px solid var(--mc); padding-left: 1rem; max-width: 600px; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1rem; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); padding: 1.4rem; transition: border-color 0.2s, transform 0.2s; cursor: default; }
+  .skill-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--mc) 40%, transparent); }
+  .skill-num { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 0.6rem; }
+  .skill-name { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .skill-desc { font-size: 0.8rem; color: #666; line-height: 1.5; font-family: 'Space Mono', monospace; margin-bottom: 0.8rem; }
+
+  .focus-box { background: color-mix(in srgb, var(--mc) 5%, transparent); border: 1px solid color-mix(in srgb, var(--mc) 15%, transparent); padding: 0.7rem 0.9rem; margin-bottom: 0.8rem; }
+  .focus-label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mc); margin-bottom: 0.4rem; opacity: 0.8; }
+  .focus-items { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: #888; line-height: 1.6; }
+
+  .resources-label { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; margin-top: 0.6rem; }
+  .resources-list { display: flex; flex-direction: column; gap: 0.35rem; }
+  .resource-link { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: #555; text-decoration: none; display: flex; align-items: flex-start; gap: 0.4rem; transition: color 0.2s; line-height: 1.4; }
+  .resource-link::before { content: '→'; opacity: 0.4; flex-shrink: 0; margin-top: 0.05rem; }
+  .resource-link:hover { color: var(--mc); }
+
+  .tip { background: rgba(255,255,255,0.02); border-left: 2px solid var(--mc); padding: 0.7rem 1rem; margin-top: 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.72rem; color: #666; font-style: italic; }
+
+  .milestone { margin-top: 3rem; padding: 2rem; border: 1px solid color-mix(in srgb, var(--mc) 25%, transparent); background: color-mix(in srgb, var(--mc) 4%, transparent); position: relative; overflow: hidden; }
+  .milestone::before { content: 'MILESTONE'; position: absolute; top: -1px; right: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; padding: 0.2rem 0.6rem; font-weight: 700; background: var(--mc); color: var(--bg); }
+  .milestone h4 { font-size: 0.8rem; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; opacity: 0.5; }
+  .milestone-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.5rem; }
+  .milestone-list li { font-size: 0.8rem; color: #aaa; display: flex; align-items: flex-start; gap: 0.5rem; font-family: 'Space Mono', monospace; line-height: 1.4; }
+  .milestone-list li::before { content: '✓'; color: var(--mc); flex-shrink: 0; margin-top: 0.1rem; }
+
+  .directions-intro { font-size: 0.9rem; color: #666; font-family: 'Space Mono', monospace; margin-bottom: 2rem; border-left: 2px solid var(--mc); padding-left: 1rem; font-style: italic; }
+  .directions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+  .direction-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; transition: transform 0.2s, border-color 0.2s; }
+  .direction-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--mc) 40%, transparent); }
+  .direction-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mc); margin-bottom: 0.8rem; }
+  .direction-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .direction-fit { font-size: 0.75rem; color: #555; font-family: 'Space Mono', monospace; font-style: italic; margin-bottom: 1rem; }
+  .direction-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .direction-tag { font-family: 'Space Mono', monospace; font-size: 0.62rem; padding: 0.2rem 0.6rem; background: color-mix(in srgb, var(--mc) 8%, transparent); border: 1px solid color-mix(in srgb, var(--mc) 20%, transparent); color: #aaa; }
+
+  .salary-section { padding: 5rem 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .salary-section.visible { opacity: 1; transform: translateY(0); }
+  .salary-section h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+  .section-sub { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: #555; margin-bottom: 2rem; }
+  .salary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+  .salary-card { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; }
+  .salary-role { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .salary-range { font-size: 1.2rem; font-weight: 800; color: var(--accent); line-height: 1.1; }
+  .salary-note { font-family: 'Space Mono', monospace; font-size: 0.72rem; color: #444; max-width: 760px; line-height: 1.8; }
+
+  .conclusion { padding: 5rem 0; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .conclusion.visible { opacity: 1; transform: translateY(0); }
+  .conclusion h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 2rem; }
+  .conclusion-points { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .conclusion-point { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; }
+  .cp-num { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.5rem; }
+  .conclusion-point p { font-size: 0.85rem; color: #888; line-height: 1.6; font-family: 'Space Mono', monospace; }
+
+  footer { padding: 4rem 2rem; text-align: center; border-top: 1px solid var(--border); }
+  footer p { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  .m1 { --mc: #e8ff3a; }
+  .m2 { --mc: #ff6b35; }
+  .m3 { --mc: #3af5ff; }
+  .m4 { --mc: #b06aff; }
+  .m5 { --mc: #ff3a6b; }
+  .m6 { --mc: #3affaa; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+  @media (max-width: 600px) {
+    .month-header { grid-template-columns: 1fr; gap: 0.5rem; }
+    .month-num { font-size: 4rem; }
+    .header-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="tag">Complete Roadmap · 2026 Edition</div>
+    <h1>Become an<span>AI Engineer</span>in 6 Months</h1>
+    <p class="header-desc">A practical, resource-packed guide to building real LLM applications — from Python basics to production-ready AI systems. Every skill, every resource, every link.</p>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Months</div></div>
+      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Topics</div></div>
+      <div class="stat"><div class="stat-num">100+</div><div class="stat-label">Resources</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label">Career Paths</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll to explore</div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-link" href="#m1">01 · Foundations</a>
+    <a class="nav-link" href="#m2">02 · LLM Dev</a>
+    <a class="nav-link" href="#m3">03 · RAG</a>
+    <a class="nav-link" href="#m4">04 · Agents</a>
+    <a class="nav-link" href="#m5">05 · Production</a>
+    <a class="nav-link" href="#m6">06 · Specialize</a>
+    <a class="nav-link" href="#salary">Salary</a>
+    <a class="nav-link" href="#conclusion">Conclusion</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- MONTH 1 -->
+<section class="month m1" id="m1">
+  <div class="month-header">
+    <div class="month-num">01</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 1</div>
+      <h2 class="month-title">Coding Foundations &amp; Python Basics</h2>
+      <p class="month-goal">Become a functional Python developer. Stop Googling basic syntax. Build simple programs confidently. AI engineering is first and foremost software engineering.</p>
+    </div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 01 / 06</div>
+      <div class="skill-name">Python</div>
+      <div class="skill-desc">Code every single example as you go. Fight passive consumption — open a code editor.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Variables · data types · loops · conditionals · functions · lists · dicts · sets · tuples · file I/O · JSON · classes &amp; basic OOP · try/except · venv · pip · requirements.txt</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.coursera.org/specializations/python" target="_blank">Python for Everybody — Coursera (free to audit)</a>
+        <a class="resource-link" href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank">freeCodeCamp 4-Hour Python Course — YouTube</a>
+        <a class="resource-link" href="https://cs50.harvard.edu/python/" target="_blank">CS50P: Intro to Programming with Python — Harvard (free)</a>
+        <a class="resource-link" href="https://docs.python.org/3/tutorial/" target="_blank">Official Python Docs Tutorial — reference</a>
+      </div>
+      <div class="tip">Practice project: CLI expense tracker reading/writing JSON, or a script calling a public weather API.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 02 / 06</div>
+      <div class="skill-name">Git &amp; GitHub</div>
+      <div class="skill-desc">Understand the problem Git solves. Commands will make sense once the mental model clicks.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">git init · add · commit · push · pull · branching · merging · .gitignore · creating repos on GitHub · README files</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://skills.github.com/" target="_blank">GitHub Skills — Official Interactive Courses</a>
+        <a class="resource-link" href="https://learngitbranching.js.org/" target="_blank">Learn Git Branching — Best Visual Tool</a>
+        <a class="resource-link" href="https://git-scm.com/book/en/v2" target="_blank">Pro Git Book — Free Comprehensive Reference</a>
+      </div>
+      <div class="tip">Every project you build, even small scripts, should live in a GitHub repo from now on.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 03 / 06</div>
+      <div class="skill-name">CLI / Terminal Basics</div>
+      <div class="skill-desc">Being slow or scared in the terminal is a real bottleneck for AI engineers.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">cd · ls · pwd · mkdir · rm · cat · less · grep · running Python scripts · environment variables · understanding PATH</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.youtube.com/watch?v=ZtqBQ68cfJc" target="_blank">50 Most Popular Linux &amp; Terminal Commands — freeCodeCamp</a>
+        <a class="resource-link" href="https://missing.csail.mit.edu/" target="_blank">The Missing Semester of Your CS Education — MIT</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 04 / 06</div>
+      <div class="skill-name">JSON, APIs, HTTP &amp; Async</div>
+      <div class="skill-desc">You'll be calling LLM APIs from day one of Month 2. Understand HTTP before you touch OpenAI or Anthropic SDKs.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">GET · POST requests · reading/writing JSON · HTTP status codes (200, 400, 401, 404, 500) · what an API key is · async def and await · why async exists</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview" target="_blank">HTTP Basics — MDN Web Docs</a>
+        <a class="resource-link" href="https://restfulapi.net/" target="_blank">REST API Tutorial — restfulapi.net</a>
+        <a class="resource-link" href="https://requests.readthedocs.io/en/latest/" target="_blank">Python requests Library Docs</a>
+        <a class="resource-link" href="https://realpython.com/async-io-python/" target="_blank">Python async/await — RealPython</a>
+      </div>
+      <div class="tip">Practice: Script calling Open-Meteo (no API key needed) and printing clean JSON output.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 05 / 06</div>
+      <div class="skill-name">Basic SQL &amp; Pandas</div>
+      <div class="skill-desc">You won't need to be a data scientist, but you'll regularly inspect, query, and manipulate data.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">SQL: SELECT · WHERE · GROUP BY · JOIN · ORDER BY | Pandas: loading CSVs · filtering rows · selecting columns · basic aggregations</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://sqlbolt.com/" target="_blank">SQLBolt — Fastest Way to Learn SQL (20 interactive lessons)</a>
+        <a class="resource-link" href="https://pandas.pydata.org/docs/getting_started/index.html" target="_blank">Pandas Official Getting Started Guide — 10 Minutes to Pandas</a>
+        <a class="resource-link" href="https://www.kaggle.com/learn/pandas" target="_blank">Kaggle Pandas Course — Hands-on, free</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 06 / 06</div>
+      <div class="skill-name">FastAPI</div>
+      <div class="skill-desc">Genuinely one of the best framework docs ever written. Work through it start to finish.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">GET &amp; POST endpoints · path &amp; query parameters · request bodies with Pydantic · running uvicorn · using /docs interface to test without a client</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://fastapi.tiangolo.com/tutorial/" target="_blank">FastAPI Official Tutorial — fastapi.tiangolo.com</a>
+        <a class="resource-link" href="https://www.youtube.com/watch?v=ZtqBQ68cfJc" target="_blank">Python API Development (19-Hour Course) — freeCodeCamp YouTube</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="milestone">
+    <h4>Month 1 Milestone — By end of month you should be able to:</h4>
+    <ul class="milestone-list">
+      <li>Write Python programs that read/write files, call APIs, handle errors</li>
+      <li>Version code with Git and push projects to GitHub</li>
+      <li>Navigate the terminal without hesitation</li>
+      <li>Understand what an HTTP request is and make one in Python</li>
+      <li>Query a SQLite database with basic SQL</li>
+      <li>Build and run a simple FastAPI app locally</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MONTH 2 -->
+<section class="month m2" id="m2">
+  <div class="month-header">
+    <div class="month-num">02</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 2</div>
+      <h2 class="month-title">Master LLM App Development</h2>
+      <p class="month-goal">Build real AI-powered applications using OpenAI and Anthropic APIs. Write prompts that work reliably, get structured data out of models, make them call your functions.</p>
+    </div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 01 / 08</div>
+      <div class="skill-name">Prompting Fundamentals</div>
+      <div class="skill-desc">Prompting is the craft of writing instructions that produce consistent, reliable outputs from probabilistic models. Work through all resources in order — each reinforces the others.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">System vs user messages · specificity · chain-of-thought (think step by step) · few-shot examples · XML structuring · how small wording changes shift output quality dramatically</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank">Anthropic Interactive Prompt Engineering Tutorial — GitHub (9 chapters with exercises)</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Anthropic Prompt Engineering Docs — Official Reference</a>
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/prompt-engineering" target="_blank">OpenAI Prompt Engineering Guide — Official</a>
+        <a class="resource-link" href="https://www.promptingguide.ai/" target="_blank">PromptingGuide.ai — Basic to Advanced, Tool Calling, Agentic Systems</a>
+      </div>
+      <div class="tip">Practice: Write 5 different prompts for the same task (e.g. summarize a doc) and compare outputs side by side.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 02 / 08</div>
+      <div class="skill-name">Structured Outputs / JSON Schemas</div>
+      <div class="skill-desc">In real apps you almost never want raw text — you want structured data you can parse, store, and use. Instructor is what most production AI engineers actually use.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Defining Pydantic models · passing schemas to the API · structured outputs vs JSON mode · handling refusals gracefully · automatic retries on validation failure</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/structured-outputs" target="_blank">OpenAI Structured Outputs Guide — Ensures models always adhere to your JSON Schema</a>
+        <a class="resource-link" href="https://python.useinstructor.com/" target="_blank">Instructor Library — Works with OpenAI, Anthropic, Google + 15 others, auto-retries</a>
+        <a class="resource-link" href="https://developers.openai.com/cookbook/examples/structured_outputs_intro/" target="_blank">OpenAI Cookbook: Structured Outputs Introduction — Chain-of-thought, data extraction, UI gen</a>
+      </div>
+      <div class="tip">Practice project: Invoice/receipt parser — raw text in, structured Python object with invoice_number, amount, items, due_date out.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 03 / 08</div>
+      <div class="skill-name">Function / Tool Calling</div>
+      <div class="skill-desc">Tool calling transforms an LLM from a text generator into something that can take actions. The model doesn't execute functions — it returns a structured call; your code executes it.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Describing functions in JSON Schema · parsing tool call responses · executing the function &amp; feeding results back · handling cases where no tool call is needed · tool_choice: "auto"</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/function-calling" target="_blank">OpenAI Function Calling Guide — 5-step flow, parallel calls, best practices</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use" target="_blank">Anthropic Tool Use Docs — Claude equivalent, same concepts slightly different syntax</a>
+        <a class="resource-link" href="https://github.com/openai/openai-cookbook/blob/main/examples/How_to_call_functions_with_chat_models.ipynb" target="_blank">OpenAI Cookbook: How to Call Functions with Chat Models — Full runnable notebook</a>
+      </div>
+      <div class="tip">Practice: Assistant with 3 tools: get_weather(city), calculate(expression), search_notes(query). Wire them up, watch model decide which to call.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 04 / 08</div>
+      <div class="skill-name">Streaming Responses</div>
+      <div class="skill-desc">Streaming shows output word-by-word as it's generated. Makes apps feel dramatically faster. Almost always the right choice for user-facing apps. Nobody wants to stare at a loading spinner for 10 seconds.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Setting stream=True · iterating over delta chunks · assembling full response from parts · wiring streaming into FastAPI endpoint using StreamingResponse</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/api-reference/streaming" target="_blank">OpenAI Streaming Docs — Official API Reference</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/api/messages-streaming" target="_blank">Anthropic Streaming Docs — Python examples</a>
+        <a class="resource-link" href="https://til.simonwillison.net/llms/streaming-llm-apis" target="_blank">How Streaming LLM APIs Work — Simon Willison (Server-Sent Events under the hood)</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 05 / 08</div>
+      <div class="skill-name">Conversation State</div>
+      <div class="skill-desc">LLMs are stateless — no memory between calls. Conversation history is something you manage by sending the full message list with every request. This is fundamental.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">The messages array structure · why you append both user and assistant messages · context window limits · basic truncation strategies (drop oldest messages, summarize history)</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/conversation-state" target="_blank">OpenAI Chat Completions Guide: Managing Conversations — Canonical Explanation</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/api/messages" target="_blank">Anthropic Messages API Docs — Equivalent reference</a>
+      </div>
+      <div class="tip">Practice: Multi-turn terminal chatbot. Add /reset command to clear history. Print current token count after each exchange.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 06 / 08</div>
+      <div class="skill-name">Cost, Latency &amp; Token Basics</div>
+      <div class="skill-desc">Shipping AI apps without understanding tokens is how you end up with surprise bills and slow apps. Boring but critical. Don't use GPT-4/Opus for everything.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">What a token is (~4 chars / ¾ of a word) · input vs output tokens priced differently · context window trade-offs · latency trade-offs between smaller faster vs larger smarter models</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://openai.com/api/pricing" target="_blank">OpenAI Pricing Page — Bookmark this, check whenever you pick a model</a>
+        <a class="resource-link" href="https://www.anthropic.com/pricing" target="_blank">Anthropic Pricing Page — Claude models</a>
+        <a class="resource-link" href="https://platform.openai.com/tokenizer" target="_blank">OpenAI Tokenizer Tool — Paste text, see exact token count (use constantly while learning)</a>
+        <a class="resource-link" href="https://github.com/openai/tiktoken" target="_blank">Tiktoken — Python library for counting tokens in code before sending requests</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 07 / 08</div>
+      <div class="skill-name">Failure Handling</div>
+      <div class="skill-desc">LLM APIs fail. Rate limits get hit, responses time out, the model returns malformed JSON. Handling failures gracefully separates a demo from a production app.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Rate limit errors (429) &amp; exponential backoff · timeout handling with httpx/requests · validating model output before using it · fallback strategies · never crashing on unexpected output</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/error-codes" target="_blank">OpenAI Error Codes Reference — Every error type and what to do about it</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/api/errors" target="_blank">Anthropic Error Handling Docs — Same for Claude</a>
+        <a class="resource-link" href="https://tenacity.readthedocs.io/" target="_blank">Tenacity — Retry Logic with Exponential Backoff (one decorator handles it all)</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 08 / 08</div>
+      <div class="skill-name">Prompt Injection Awareness</div>
+      <div class="skill-desc">The #1 security risk in LLM applications. Untrusted user input combined with system instructions can cause unintended actions. Know this before you ship anything.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Direct vs indirect injection · why system prompts aren't truly "secure" · principle of least privilege for tool access · never trust unvalidated LLM output for consequential decisions</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank">OWASP Top 10 for LLM Apps — LLM01: Prompt Injection (authoritative, covers direct + indirect)</a>
+        <a class="resource-link" href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html" target="_blank">OWASP Prompt Injection Prevention Cheat Sheet — Input validation, privilege control, output validation</a>
+        <a class="resource-link" href="https://www.evidentlyai.com/llm-guide/prompt-injection-llm" target="_blank">Evidently AI: What is Prompt Injection — Developer-focused, attack types and design patterns</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="milestone">
+    <h4>Month 2 Milestone — By end of month you should be able to:</h4>
+    <ul class="milestone-list">
+      <li>Write prompts that produce consistent, reliable outputs for a given task</li>
+      <li>Get structured JSON from any model using Pydantic + Instructor</li>
+      <li>Wire up tool calling so a model can call your Python functions</li>
+      <li>Stream responses in real time through a FastAPI endpoint</li>
+      <li>Manage multi-turn conversation history properly</li>
+      <li>Estimate the token cost of a request before sending it</li>
+      <li>Handle API errors, timeouts, and bad outputs without crashing</li>
+      <li>Explain what prompt injection is and apply basic defenses</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MONTH 3 -->
+<section class="month m3" id="m3">
+  <div class="month-header">
+    <div class="month-num">03</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 3</div>
+      <h2 class="month-title">Learn RAG Properly</h2>
+      <p class="month-goal">Build systems that let LLMs answer questions from your documents. Ingest documents, embed &amp; store them, retrieve the right chunks, produce grounded cited answers.</p>
+    </div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 01 / 09</div>
+      <div class="skill-name">Embeddings</div>
+      <div class="skill-desc">A text embedding projects text into a high-dimensional vector space. Semantically similar text ends up close together — which makes similarity search possible. The foundation everything else is built on.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">What a vector is conceptually · why similar text produces similar vectors · cosine similarity · difference between embedding models (OpenAI vs HuggingFace sentence-transformers) · what embedding dimension means</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://stackoverflow.blog/2023/11/09/an-intuitive-introduction-to-text-embeddings/" target="_blank">An Intuitive Introduction to Text Embeddings — Stack Overflow Blog (best beginner explanation)</a>
+        <a class="resource-link" href="https://developers.google.com/machine-learning/crash-course/embeddings" target="_blank">Google ML Crash Course: Embeddings — Why dense vectors beat one-hot encoding</a>
+        <a class="resource-link" href="https://huggingface.co/blog/getting-started-with-embeddings" target="_blank">Getting Started With Embeddings — HuggingFace (sentence-transformers, semantic search over FAQ)</a>
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/embeddings" target="_blank">OpenAI Embeddings Guide — text-embedding-3-small and text-embedding-3-large in code</a>
+      </div>
+      <div class="tip">Practice: Embed 20 sentences, write nearest-neighbor search returning top 3 most similar to a query. This is the heart of RAG in miniature.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 02 / 09</div>
+      <div class="skill-name">Chunking</div>
+      <div class="skill-desc">How you chunk directly affects retrieval quality. Even a perfect retrieval system fails if it searches over poorly prepared data. Chunk size ~250 tokens, 10-20% overlap is a good starting point.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Fixed-size with overlap as baseline · recursive chunking for structured docs · semantic chunking for better boundary detection · trade-off: too large = low precision, too small = lost context</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://weaviate.io/blog/chunking-strategies-for-rag" target="_blank">Chunking Strategies for RAG — Weaviate (most practical guide, fixed/recursive/semantic)</a>
+        <a class="resource-link" href="https://unstructured.io/blog/chunking-for-rag-best-practices" target="_blank">Chunking for RAG Best Practices — Unstructured (sizes, overlap, embedding context window limits)</a>
+        <a class="resource-link" href="https://python.langchain.com/docs/concepts/text_splitters/" target="_blank">LangChain Text Splitters Docs — RecursiveCharacterTextSplitter, MarkdownTextSplitter, semantic splitters</a>
+      </div>
+      <div class="tip">Start: RecursiveCharacterTextSplitter with chunk_size=500, chunk_overlap=50. Most sensible default for most documents.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 03 / 09</div>
+      <div class="skill-name">Vector Databases</div>
+      <div class="skill-desc">Choose based on situation: Chroma (local), Pinecone (managed scale), Weaviate (hybrid search), Qdrant (complex filters, self-hosted), pgvector (already on PostgreSQL).</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Creating a collection · inserting embeddings with metadata · querying by similarity with top_k · filtering by metadata at query time. No need to understand HNSW/IVF internals.</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.trychroma.com/" target="_blank">Chroma Official Docs — In-memory/local, zero infrastructure, perfect for prototyping</a>
+        <a class="resource-link" href="https://www.pinecone.io/learn/" target="_blank">Pinecone Learning Center — Excellent provider-agnostic RAG tutorials</a>
+        <a class="resource-link" href="https://qdrant.tech/documentation/" target="_blank">Qdrant Documentation — Best open-source for production with advanced filtering</a>
+        <a class="resource-link" href="https://github.com/pgvector/pgvector" target="_blank">pgvector — Vector search directly in PostgreSQL, no new infrastructure</a>
+      </div>
+      <div class="tip">Practice: Index 50-100 pages of public docs into Chroma with metadata (source URL, section title). Query function returning top 5 chunks for any question.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 04 / 09</div>
+      <div class="skill-name">Metadata Filtering</div>
+      <div class="skill-desc">Raw similarity search alone isn't enough. Filtering constrains retrieval to a relevant subset. This separates toy demos from production systems where users can filter by date, source, or category.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Tag every chunk with metadata at ingestion (source filename, page number, section, date, category) · use those fields to filter results at query time</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.pinecone.io/guides/data/filter-with-metadata" target="_blank">Pinecone: Metadata Filtering Guide — Clear explanation with code examples</a>
+        <a class="resource-link" href="https://docs.llamaindex.ai/en/stable/module_guides/querying/node_postprocessors/node_postprocessors/" target="_blank">LlamaIndex: Metadata Filters Guide — Applying filters at query time in LlamaIndex pipelines</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 05 / 09</div>
+      <div class="skill-name">Reranking</div>
+      <div class="skill-desc">Two-stage: embed and search (fast, approximate) → rerank top-k (slower, more accurate). Dramatically better retrieval quality with only a modest latency cost.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Two-stage retrieve-then-rerank pattern · bi-encoder (first-stage embedding search) vs cross-encoder (reranking) · latency/quality trade-off of reranking top-20 vs top-5</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.cohere.com/docs/reranking-with-cohere" target="_blank">Cohere Reranking Docs — Full workflow including structured data like emails &amp; JSON. Single line to add.</a>
+        <a class="resource-link" href="https://python.langchain.com/docs/integrations/retrievers/cohere-reranker/" target="_blank">LangChain: Cohere Reranker Integration — ContextualCompressionRetriever</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 06 / 09</div>
+      <div class="skill-name">Retrieval Quality Issues</div>
+      <div class="skill-desc">Most RAG failures aren't model failures — they're retrieval failures. Understanding how retrieval goes wrong is essential for debugging real systems.</div>
+      <div class="focus-box">
+        <div class="focus-label">Common issues + fixes</div>
+        <div class="focus-items">Semantic drift → query rewriting / HyDE | Chunk boundaries → increase overlap / semantic chunking | Missing metadata context → use metadata filtering | Top-k too small → increase top_k at retrieval, reduce after reranking</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://python.langchain.com/docs/how_to/#query-analysis" target="_blank">LangChain: Query Transformations — Rewriting, step-back prompting, HyDE</a>
+        <a class="resource-link" href="https://www.pinecone.io/learn/retrieval-augmented-generation/#retrieval-quality" target="_blank">Pinecone: Improving Retrieval Quality — Common failure modes with fixes</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 07 / 09</div>
+      <div class="skill-name">Hallucination Reduction</div>
+      <div class="skill-desc">RAG dramatically reduces hallucinations vs vanilla LLMs but doesn't eliminate them. Retrieval failures, bad chunks, and conflicting info can still cause the model to make things up.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Prompt grounding (answer only from provided context) · "I don't know" when answer isn't there · confidence threshold before surfacing responses · validate retrieval quality before blaming the LLM</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.getzep.com/ai-agents/reducing-llm-hallucinations/" target="_blank">Reducing LLM Hallucinations: A Developer's Guide — Zep (prompt grounding, CoT, output verification)</a>
+        <a class="resource-link" href="https://www.voiceflow.com/blog/prevent-llm-hallucinations" target="_blank">5 Ways to Reduce LLM Hallucinations — Voiceflow (RAG + CoT + guardrails combined)</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 08 / 09</div>
+      <div class="skill-name">Citations &amp; Grounding</div>
+      <div class="skill-desc">A grounded RAG system doesn't just answer — it tells you where the answer came from. Critical for user trust and for debugging.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Pass chunk metadata (source filename, page number, URL) into your prompt · instruct model to reference sources in its answer · surface sources in your UI/API response</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/citations" target="_blank">Anthropic: Giving Claude Sources — How to prompt Claude for cited responses with source references</a>
+        <a class="resource-link" href="https://python.langchain.com/docs/how_to/qa_sources/" target="_blank">LangChain: RAG with Sources — Return source documents alongside answers in a LangChain pipeline</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 09 / 09</div>
+      <div class="skill-name">RAG Frameworks: LlamaIndex &amp; LangChain</div>
+      <div class="skill-desc">LlamaIndex: optimized for search &amp; indexing, working prototype in an afternoon. LangChain: shines for orchestration, multi-agent, tool calling. Start with LlamaIndex for RAG in Month 3, LangChain in Month 4.</div>
+      <div class="focus-box">
+        <div class="focus-label">LlamaIndex 5 key stages</div>
+        <div class="focus-items">Loading · Indexing · Storing · Querying · Evaluating</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://developers.llamaindex.ai/python/framework/understanding/rag/" target="_blank">LlamaIndex: Introduction to RAG — 5 key stages and how LlamaIndex handles each</a>
+        <a class="resource-link" href="https://developers.llamaindex.ai/python/framework/getting_started/starter_example/" target="_blank">LlamaIndex Starter Tutorial — Working RAG system in under 30 lines (official quickstart)</a>
+        <a class="resource-link" href="https://docs.langchain.com/oss/python/langchain/rag" target="_blank">LangChain: Build a RAG Agent — From 40-line minimal version to full pipeline with reranking</a>
+      </div>
+      <div class="tip">Practice: "Chat with your docs" — ingest 10-20 PDFs, FastAPI endpoint, top 5 chunks with reranking, cited answer from Claude/OpenAI. This is a real portfolio piece.</div>
+    </div>
+
+  </div>
+  <div class="milestone">
+    <h4>Month 3 Milestone — By end of month you should be able to:</h4>
+    <ul class="milestone-list">
+      <li>Explain what an embedding is and why similar text produces similar vectors</li>
+      <li>Chunk any document intelligently using appropriate strategies</li>
+      <li>Store and query embeddings in a vector database with metadata filtering</li>
+      <li>Add a reranking step to improve retrieval quality</li>
+      <li>Debug common retrieval failures systematically</li>
+      <li>Build complete end-to-end RAG pipeline with grounded, cited answers</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MONTH 4 -->
+<section class="month m4" id="m4">
+  <div class="month-header">
+    <div class="month-num">04</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 4</div>
+      <h2 class="month-title">Agents, Tools, Workflows &amp; Evals</h2>
+      <p class="month-goal">Build AI systems that take sequences of actions autonomously. Know when agents are the wrong choice. Measure the performance of everything you build.</p>
+    </div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 01 / 08</div>
+      <div class="skill-name">Agent Loops</div>
+      <div class="skill-desc">An agent is not magic — it's a while loop with an LLM making the branching decisions. The "thinking" is in the prompt, the "branching" is when the agent chooses between tools, the "doing" is when external functions are called.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Perceive → Plan → Act → Observe cycle · how the agent loop terminates · what happens when a tool call fails · why agents are just while loops with LLM branching</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic: Building Effective Agents — Single best piece on agents in production (read this first)</a>
+        <a class="resource-link" href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf" target="_blank">OpenAI: A Practical Guide to Building Agents — Official PDF, patterns, guardrails, safety</a>
+        <a class="resource-link" href="https://www.freecodecamp.org/news/the-open-source-llm-agent-handbook/" target="_blank">The Open Source LLM Agent Handbook — freeCodeCamp (LangGraph, CrewAI, planning, memory, tools)</a>
+        <a class="resource-link" href="https://academy.langchain.com/courses/intro-to-langgraph" target="_blank">Intro to LangGraph — LangChain Academy (free official course, state/memory/human-in-the-loop)</a>
+      </div>
+      <div class="tip">Build an agent from scratch without any framework first — just the raw API. This is the most valuable thing you can do to understand what frameworks are abstracting.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 02 / 08</div>
+      <div class="skill-name">Tool Selection &amp; Design</div>
+      <div class="skill-desc">Tool descriptions are the user manual for the LLM. If the manual is vague, the LLM misuses the tool. A poorly described tool will be called wrong, at the wrong time, or ignored entirely.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Self-explanatory verb names · descriptions explaining WHEN to call (not just what it does) · keep params minimal and well-typed · design with the LLM as the caller in mind</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/function-calling/best-practices" target="_blank">OpenAI: Function Calling Best Practices — Naming conventions and parameter documentation patterns</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use/implement-tool-use#best-practices-for-tool-definitions" target="_blank">Anthropic: Tool Use Best Practices — When to let model choose vs forcing a specific tool</a>
+      </div>
+      <div class="tip">Test every description: "If I had no docs and only this JSON schema, would I know exactly when and how to call this?" If not, rewrite it.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 03 / 08</div>
+      <div class="skill-name">State Management</div>
+      <div class="skill-desc">In LangGraph, state is a shared memory object that flows through the graph — storing messages, variables, intermediate results, and decision history. Key to multi-turn tasks and clean handoffs.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Defining state schemas with TypedDict · how reducers work for merging parallel updates · in-memory state vs persisted checkpointing · human-in-the-loop pauses by inspecting/modifying state mid-execution</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://langchain-ai.github.io/langgraph/concepts/low_level/#state" target="_blank">LangGraph Official Docs: State Management — State schemas, reducers, how state flows through nodes</a>
+        <a class="resource-link" href="https://www.datacamp.com/tutorial/langgraph-agents" target="_blank">DataCamp: LangGraph Agents Tutorial — State, nodes, edges, building up to stateful agents with persistent memory</a>
+        <a class="resource-link" href="https://realpython.com/langgraph-python/" target="_blank">Real Python: LangGraph in Python — Complete stateful LangGraph agent with detailed state graph explanation</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 04 / 08</div>
+      <div class="skill-name">Retries &amp; Failure Handling in Agents</div>
+      <div class="skill-desc">Agents fail differently to regular LLM calls. A bad tool call mid-loop can corrupt state, cause infinite loops, or silently produce wrong answers. Explicit strategies for all of these are required.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Maximum iteration limits to prevent infinite loops · per-tool retry with exponential backoff · catching and logging exceptions at the tool layer without crashing the agent · when to surface failure vs retry silently</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://langchain-ai.github.io/langgraph/how-tos/autofill-tool-errors/" target="_blank">LangGraph: Error Handling and Retries — Automatic error handling and retry logic at the tool node level</a>
+        <a class="resource-link" href="https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf" target="_blank">OpenAI Practical Agents Guide: Guardrails Section — Layered defense: LLM checks + regex + moderation APIs</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 05 / 08</div>
+      <div class="skill-name">When NOT to Use Agents</div>
+      <div class="skill-desc">One of the most important and most overlooked skills. Agents are slow, expensive, unpredictable, and hard to debug. Knowing when to use something simpler is a sign of good judgment.</div>
+      <div class="focus-box">
+        <div class="focus-label">Decision framework — memorize this</div>
+        <div class="focus-items">Single LLM call → if task can be solved in one prompt | Workflow → if steps are fixed &amp; predictable | Agent → ONLY if number of steps is genuinely unpredictable &amp; requires dynamic decision-making</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.anthropic.com/research/building-effective-agents" target="_blank">Anthropic: Building Effective Agents — When to use agents, the authoritative answer</a>
+        <a class="resource-link" href="https://simonwillison.net/2025/Sep/30/designing-agentic-loops/" target="_blank">Simon Willison: Designing Agentic Loops — Senior engineer's take on when complexity is justified</a>
+      </div>
+      <div class="tip">A chain of 3 fixed LLM calls will always be faster, cheaper, and more debuggable than an agent that could make 3 calls. Reserve agents for genuinely open-ended tasks.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 06 / 08</div>
+      <div class="skill-name">Multi-Step Workflows</div>
+      <div class="skill-desc">Between "single prompt" and "full agent" lies a vast productive middle ground. Workflows trade latency for higher accuracy by making each LLM call an easier, more focused task.</div>
+      <div class="focus-box">
+        <div class="focus-label">Common patterns</div>
+        <div class="focus-items">Prompt chaining (output of one = input to next) · Routing (classify → specialized handler) · Parallelization (multiple calls simultaneously, then aggregate) · Orchestrator-subagent (one LLM plans, others execute)</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://www.anthropic.com/research/building-effective-agents#workflow-patterns" target="_blank">Anthropic: Workflow Patterns — All main patterns with diagrams and code examples</a>
+        <a class="resource-link" href="https://langchain-ai.github.io/langgraph/concepts/multi_agent/" target="_blank">LangGraph: Multi-Agent Networks — Supervisor and handoff patterns</a>
+      </div>
+      <div class="tip">Practice: 3-step pipeline — extract facts from article → generate tweet/LinkedIn/summary in parallel → score all three and pick the best. No agent required.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 07 / 08</div>
+      <div class="skill-name">Evaluation Harnesses</div>
+      <div class="skill-desc">Evals are how you know if your system is actually working — not just on examples you tested by hand, but systematically across hundreds of inputs. Every prompt change without evals is a gamble.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Golden test sets of 20-50 inputs with expected outputs · deterministic scoring (string match, JSON schema validation) · LLM-as-judge for open-ended outputs · running evals automatically on every change</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://deepeval.com/docs/getting-started" target="_blank">DeepEval — Open-source, pytest-inspired, 50+ built-in metrics (hallucination, relevancy, factual consistency)</a>
+        <a class="resource-link" href="https://github.com/promptfoo/promptfoo" target="_blank">Promptfoo — CLI test suite, multi-prompt/model comparison, CI/CD integration + red teaming</a>
+        <a class="resource-link" href="https://smith.langchain.com/" target="_blank">LangSmith — Tracing, debugging, evaluation (free tier generous, great for debugging agent loops)</a>
+        <a class="resource-link" href="https://docs.ragas.io/" target="_blank">Ragas — RAG-specialized: faithfulness, answer relevancy, context precision and recall</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 08 / 08</div>
+      <div class="skill-name">Task Success Metrics</div>
+      <div class="skill-desc">Beyond automated evals, you need metrics that tell you whether your agent is actually accomplishing its goal.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Process metrics (did agent call the right tool?) vs outcome metrics (did the task succeed?) · define clear success criteria BEFORE building · LLM-as-judge for long-form answers that resist exact matching</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://hamel.dev/blog/posts/evals/" target="_blank">Your AI Product Needs Evals — Hamel Husain (practical, production AI at scale)</a>
+        <a class="resource-link" href="https://github.com/openai/evals" target="_blank">OpenAI Evals Framework — Large library of community-contributed eval patterns to adapt</a>
+      </div>
+      <div class="tip">Practice: Take your Month 3 RAG pipeline. Create 30 Q&amp;A pairs. Score each answer with DeepEval. Change one thing (chunk size, model, top-k) and re-run to see if it improved.</div>
+    </div>
+
+  </div>
+  <div class="milestone">
+    <h4>Month 4 Milestone — By end of month you should be able to:</h4>
+    <ul class="milestone-list">
+      <li>Explain what an agent loop is and implement one from scratch without a framework</li>
+      <li>Write tool descriptions that get selected correctly and reliably</li>
+      <li>Manage agent state properly using LangGraph or equivalent</li>
+      <li>Handle failures inside agent loops without crashing</li>
+      <li>Decide confidently whether a task needs agent, workflow, or single prompt</li>
+      <li>Build multi-step workflows that chain, route, and parallelize LLM calls</li>
+      <li>Write automated evals that catch regressions when prompts/models change</li>
+      <li>Define and measure task success metrics for any AI system you build</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MONTH 5 -->
+<section class="month m5" id="m5">
+  <div class="month-header">
+    <div class="month-num">05</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 5</div>
+      <h2 class="month-title">Deployment, Product Thinking &amp; Reliability</h2>
+      <p class="month-goal">Take everything you've built and make it production-ready. Real users, real traffic, real failures. This is where most AI engineers stall — and what companies actually pay for.</p>
+    </div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 01 / 08</div>
+      <div class="skill-name">FastAPI Production Patterns</div>
+      <div class="skill-desc">A single uvicorn process with --reload is fine for building. In production it becomes the bottleneck the moment real traffic arrives.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Gunicorn with Uvicorn workers (not bare Uvicorn) · health check endpoints · CORS middleware · async database sessions · background tasks for non-blocking responses</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://fastapi.tiangolo.com/deployment/" target="_blank">FastAPI Deployment Docs — Official (Uvicorn workers, Gunicorn, Docker)</a>
+        <a class="resource-link" href="https://craftyourstartup.com/cys-docs/fastapi-production-deployment/" target="_blank">FastAPI Production Deployment Guide — Gunicorn config, Nginx reverse proxy, health checks, rate limiting</a>
+        <a class="resource-link" href="https://fastlaunchapi.dev/blog/fastapi-best-practices-production-2026" target="_blank">FastAPI Best Practices for Production 2026 — Async DB pooling, Redis caching, JWT auth, background tasks</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 02 / 08</div>
+      <div class="skill-name">Docker</div>
+      <div class="skill-desc">Docker solves "it works on my machine." Consistent deployments, no dependency conflicts, easy scaling. Containerize your FastAPI + LLM app and deploy it anywhere.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Writing a Dockerfile for Python/FastAPI · multi-stage builds (keep images small) · Docker Compose for multi-service (app + DB + Redis) · env vars for secrets · .dockerignore to avoid leaking sensitive files</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.docker.com/get-started/" target="_blank">Docker Official Getting Started Guide — Images, containers, Dockerfiles, Docker Compose</a>
+        <a class="resource-link" href="https://www.freecodecamp.org/news/build-and-deploy-multi-agent-ai-with-python-and-docker/" target="_blank">Build &amp; Deploy Multi-Agent AI with Python and Docker — freeCodeCamp end-to-end tutorial</a>
+        <a class="resource-link" href="https://www.datacamp.com/tutorial/deploy-llm-applications-using-docker" target="_blank">Deploy LLM Applications Using Docker — DataCamp (specifically for LLM apps with RAG pipelines)</a>
+        <a class="resource-link" href="https://apxml.com/courses/python-llm-workflows/chapter-10-deployment-operational-practices/containerization-docker-llm-apps" target="_blank">Docker Containerization for LLM Apps — ApXML (base images, multi-stage builds, multi-service)</a>
+      </div>
+      <div class="tip">Practice: Containerize your Month 3 RAG app. docker-compose.yml: FastAPI + vector DB + Redis. docker compose up starts everything.</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 03 / 08</div>
+      <div class="skill-name">Background Jobs &amp; Queues</div>
+      <div class="skill-desc">LLM calls are slow. If a user waits 30 seconds, they leave. Accept the request immediately, process async, notify when done.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">FastAPI BackgroundTasks for quick fire-and-forget · Celery for heavier tasks · Redis as message broker · handling task failures and retries · returning job status to the user</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.celeryq.dev/en/stable/getting-started/introduction.html" target="_blank">Celery Official Getting Started Guide — Standard Python task queue, task definition, worker management</a>
+        <a class="resource-link" href="https://fastapi.tiangolo.com/tutorial/background-tasks/" target="_blank">FastAPI Background Tasks Docs — Built-in lightweight tasks, use for simple fire-and-forget</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 04 / 08</div>
+      <div class="skill-name">Auth &amp; API Key Security</div>
+      <div class="skill-desc">Without auth, anyone can use your endpoints and burn through your LLM credits. You'll wake up to a $5,000 bill.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">JWT tokens for user auth · API key management for service-to-service · rate limiting per user/key · never store secrets in code (use env vars) · authentication (who are you) vs authorization (what can you do)</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://fastapi.tiangolo.com/tutorial/security/" target="_blank">FastAPI Security Docs — OAuth2, JWT tokens, API keys, dependency-based auth (full tutorial)</a>
+        <a class="resource-link" href="https://owasp.org/API-Security/" target="_blank">OWASP API Security Top 10 — Broken authentication, injection, mass assignment</a>
+        <a class="resource-link" href="https://auth0.com/docs/get-started/authentication-and-authorization" target="_blank">Auth0: API Auth Best Practices — Practical guide to authentication and authorization in APIs</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 05 / 08</div>
+      <div class="skill-name">Logging &amp; Observability</div>
+      <div class="skill-desc">LLM apps can return 200 status code and still produce a useless or hallucinated answer — traditional monitoring doesn't catch this. You need LLM-specific observability.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Trace every LLM call (input prompt, output, tokens, latency, cost) · structured JSON logging · dashboards showing request volume, error rates, cost per day · alerting when things break or costs spike</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://langfuse.com/docs/observability/overview" target="_blank">Langfuse — Open-source LLM observability (prompt versioning, eval, LLM-as-judge, integrates OpenAI/Anthropic/LangChain/LlamaIndex)</a>
+        <a class="resource-link" href="https://smith.langchain.com/" target="_blank">LangSmith — Tracing, debugging, monitoring dashboards. One env var to set up with LangChain. Free tier generous.</a>
+        <a class="resource-link" href="https://www.structlog.org/" target="_blank">Python Structlog — Structured JSON logging, far better than print() or basic logging for production</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 06 / 08</div>
+      <div class="skill-name">Prompt Version Management</div>
+      <div class="skill-desc">In production, your prompts are code. They need version control, testing, and rollback ability. Changing a prompt without tracking what you changed is how you break things and can't figure out why.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Store prompts outside your application code · version every prompt change · A/B test prompt variants in production · have a rollback strategy when a new prompt performs worse · deploy prompt changes without redeploying the app</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://langfuse.com/docs/prompts" target="_blank">Langfuse Prompt Management — Centralized versioning, built-in playground for testing</a>
+        <a class="resource-link" href="https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" target="_blank">Anthropic Prompt Management Best Practices — Organizing, iterating, managing prompts at scale</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 07 / 08</div>
+      <div class="skill-name">Cost Monitoring &amp; Rate Limits</div>
+      <div class="skill-desc">Without cost controls, a traffic spike or prompt bug can burn through hundreds of dollars in minutes.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Hard spending limits per day/month · per-user rate limits in your API · use cheaper models for simple tasks · cache repeated identical requests with Redis · monitor cost per request to catch expensive prompts early</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/usage" target="_blank">OpenAI Usage Dashboard — Track spending by model/day, set usage limits</a>
+        <a class="resource-link" href="https://console.anthropic.com/" target="_blank">Anthropic Usage Dashboard (console.anthropic.com) — Claude API usage tracking</a>
+        <a class="resource-link" href="https://www.helicone.ai/" target="_blank">Helicone — Proxy-based observability, automatic cost tracking, one line of code (change base URL)</a>
+        <a class="resource-link" href="https://github.com/BerriAI/litellm" target="_blank">LiteLLM — Unified interface for 100+ LLM providers, budget management, rate limiting, spend tracking</a>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-num">SKILL 08 / 08</div>
+      <div class="skill-name">Caching</div>
+      <div class="skill-desc">If 20% of users ask similar questions, you're paying for the same LLM call 20 times. Caching is the simplest way to reduce costs and latency simultaneously.</div>
+      <div class="focus-box">
+        <div class="focus-label">What to focus on</div>
+        <div class="focus-items">Exact-match caching for identical prompts · semantic caching for similar queries · cache invalidation strategies (TTL-based is simplest) · measuring cache hit rates to understand real cost savings</div>
+      </div>
+      <div class="resources-label">Resources</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://redis.io/docs/" target="_blank">Redis Official Docs — Standard in-memory data store, fast and simple for LLM response caching</a>
+        <a class="resource-link" href="https://github.com/zilliztech/GPTCache" target="_blank">GPTCache — Semantic caching for LLMs using embedding similarity (not just exact match)</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="milestone">
+    <h4>Month 5 Milestone — By end of month you should be able to:</h4>
+    <ul class="milestone-list">
+      <li>Deploy a FastAPI + LLM app in Docker with proper production configuration</li>
+      <li>Handle long-running tasks with background jobs and queues</li>
+      <li>Secure your API with auth, rate limits, and API key management</li>
+      <li>Trace and debug LLM calls using Langfuse or LangSmith</li>
+      <li>Manage prompts with version control and rollback capability</li>
+      <li>Monitor costs in real time and set spending limits</li>
+      <li>Cache LLM responses to reduce latency and cost</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MONTH 6 -->
+<section class="month m6" id="m6">
+  <div class="month-header">
+    <div class="month-num">06</div>
+    <div class="month-meta">
+      <div class="month-badge">Month 6</div>
+      <h2 class="month-title">Specialize &amp; Become Hireable</h2>
+      <p class="month-goal">Choose one direction and focus on practice. Although everything in months 1–5 is also best learned purely through practice — not just reading.</p>
+    </div>
+  </div>
+
+  <div class="directions-intro">Choose one direction. Go deep. Ship real things. Start applying the moment you have working projects.</div>
+
+  <div class="directions-grid">
+
+    <div class="direction-card">
+      <div class="direction-label">Direction 01 — Best for: startup jobs fast</div>
+      <div class="direction-title">AI Product Engineer</div>
+      <div class="direction-fit">Build AI-powered products that real users interact with. You have most skills from Months 1–5. Now go deeper on the product side.</div>
+      <div class="direction-tags">
+        <span class="direction-tag">LLM Apps</span>
+        <span class="direction-tag">RAG</span>
+        <span class="direction-tag">Agents</span>
+        <span class="direction-tag">Deployment</span>
+        <span class="direction-tag">Product UX</span>
+      </div>
+      <div class="resources-label">End-to-End Product Building</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://sdk.vercel.ai/docs" target="_blank">Vercel AI SDK — Fastest way to build AI UIs with streaming (React, Next.js, Vue, built-in streaming components)</a>
+        <a class="resource-link" href="https://docs.streamlit.io/" target="_blank">Streamlit — Data apps and AI demos in pure Python (ideal for internal tools and MVPs)</a>
+        <a class="resource-link" href="https://www.gradio.app/docs" target="_blank">Gradio — Quick ML/AI interfaces with minimal code, especially good for demoing models</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">Product UX for AI</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://pair.withgoogle.com/guidebook/" target="_blank">Google: People + AI Guidebook — Best resource on designing human-AI interaction, setting expectations, handling errors</a>
+        <a class="resource-link" href="https://www.nngroup.com/topic/artificial-intelligence/" target="_blank">Nielsen Norman Group: AI UX Guidelines — Research-backed guidelines for AI interfaces</a>
+      </div>
+      <div class="tip">Goal this month: Build 2-3 complete projects you can demo. Ship them. Put on GitHub. Deploy somewhere people can try them. A "chat with your docs" app, an AI-powered internal tool, or an agent that automates a real workflow.</div>
+    </div>
+
+    <div class="direction-card">
+      <div class="direction-label">Direction 02 — Best for: deeper technical roles</div>
+      <div class="direction-title">Applied ML / LLM Engineer</div>
+      <div class="direction-fit">Go beyond API calls. Understand what happens under the hood. Fine-tuning, open-source models, inference optimization.</div>
+      <div class="direction-tags">
+        <span class="direction-tag">Fine-tuning</span>
+        <span class="direction-tag">LoRA / QLoRA</span>
+        <span class="direction-tag">Open-Source Models</span>
+        <span class="direction-tag">Inference Optimization</span>
+      </div>
+      <div class="resources-label">When to Fine-tune vs Prompt</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://developers.google.com/machine-learning/crash-course/llm/tuning" target="_blank">Google ML Crash Course: Fine-tuning, Distillation &amp; Prompt Engineering — Clearest explanation of when to use each</a>
+        <a class="resource-link" href="https://www.codecademy.com/article/prompt-engineering-vs-fine-tuning" target="_blank">Codecademy: Prompt Engineering vs Fine-Tuning — Practical decision framework with clear use cases</a>
+        <a class="resource-link" href="https://www.ibm.com/think/topics/rag-vs-fine-tuning-vs-prompt-engineering" target="_blank">IBM: RAG vs Fine-Tuning vs Prompt Engineering — Complete decision space including when to combine</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">Fine-tuning in Practice</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://platform.openai.com/docs/guides/fine-tuning" target="_blank">OpenAI Fine-tuning Guide — Upload JSONL, run a job, get a custom model (easy way to start)</a>
+        <a class="resource-link" href="https://huggingface.co/docs/transformers/training" target="_blank">HuggingFace Transformers Fine-tuning Tutorial — Standard library for open-source models</a>
+        <a class="resource-link" href="https://github.com/unslothai/unsloth" target="_blank">Unsloth — 2x faster fine-tuning, 80% less memory. LoRA and QLoRA. Consumer hardware.</a>
+        <a class="resource-link" href="https://github.com/hiyouga/LLaMA-Factory" target="_blank">LLaMA-Factory — Fine-tune 100+ LLMs. Web UI for no-code fine-tuning. LoRA/QLoRA/RLHF/DPO support.</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">Open-Source Models</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://ollama.ai/" target="_blank">Ollama — Run open-source LLMs locally with one command (Llama, Mistral, Gemma, dozens of others)</a>
+        <a class="resource-link" href="https://huggingface.co/models" target="_blank">HuggingFace Model Hub — Largest repository of open-source models, browse and download</a>
+        <a class="resource-link" href="https://github.com/vllm-project/vllm" target="_blank">vLLM — High-throughput inference engine, 2-4x faster than naive HuggingFace serving. Standard for production.</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">Inference Optimization</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://huggingface.co/docs/transformers/llm_optims" target="_blank">HuggingFace: Optimizing LLM Inference — KV-cache optimization, quantization, batching strategies</a>
+        <a class="resource-link" href="https://github.com/NVIDIA/TensorRT-LLM" target="_blank">NVIDIA TensorRT-LLM — Maximum inference performance on NVIDIA GPUs. Used by most production LLM serving at scale.</a>
+      </div>
+      <div class="tip">Decision framework: Start with prompt engineering → Add RAG if model needs specific data → Fine-tune ONLY when prompting + RAG can't achieve required quality, consistency, or latency.</div>
+    </div>
+
+    <div class="direction-card">
+      <div class="direction-label">Direction 03 — Best for: immediate business work</div>
+      <div class="direction-title">AI Automation Engineer</div>
+      <div class="direction-fit">Automate real business workflows with AI. Less about building products, more about solving operational problems that businesses actually pay for.</div>
+      <div class="direction-tags">
+        <span class="direction-tag">n8n</span>
+        <span class="direction-tag">Workflow Orchestration</span>
+        <span class="direction-tag">CRM / Email</span>
+        <span class="direction-tag">Business Ops</span>
+      </div>
+      <div class="resources-label">Workflow Orchestration</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://docs.n8n.io/" target="_blank">n8n — Visual workflow automation with AI nodes. Connect LLMs to 400+ integrations (Slack, Gmail, Notion, CRMs). Best no-code/low-code option.</a>
+        <a class="resource-link" href="https://langchain-ai.github.io/langgraph/concepts/multi_agent/" target="_blank">LangGraph: Multi-Agent Workflows — Code-first orchestration for complex multi-agent systems when n8n isn't enough</a>
+        <a class="resource-link" href="https://docs.temporal.io/" target="_blank">Temporal — Durable workflow engine for long-running, fault-tolerant processes that need to survive crashes and retries</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">Business Process Automation</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://zapier.com/ai" target="_blank">Zapier AI Actions — Connect AI to 6,000+ apps without code. Good for prototyping before building custom solutions.</a>
+        <a class="resource-link" href="https://www.make.com/" target="_blank">Make (Integromat) — Visual automation with advanced logic and AI integrations. More powerful than Zapier for complex workflows.</a>
+      </div>
+      <div class="resources-label" style="margin-top:1rem">CRM, Docs, Email &amp; Support Automation</div>
+      <div class="resources-list">
+        <a class="resource-link" href="https://github.com/openai/openai-cookbook" target="_blank">OpenAI Cookbook: AI-Powered Email Processing — Patterns for classifying, routing, and responding to emails with AI</a>
+        <a class="resource-link" href="https://python.langchain.com/docs/how_to/#document-loaders" target="_blank">LangChain: Document Processing Pipelines — Ingesting and processing documents from 80+ sources</a>
+      </div>
+      <div class="tip">Practice project: End-to-end lead qualification system — import leads → LLM researches each lead → score/rank based on ICP → draft personalized outreach → log to CRM/spreadsheet. Real, sellable automation.</div>
+    </div>
+
+  </div>
+
+  <div class="milestone">
+    <h4>Month 6 Milestone</h4>
+    <ul class="milestone-list">
+      <li>2–3 complete, deployed projects you can demo to anyone</li>
+      <li>A GitHub portfolio that shows what you've built, not what you've studied</li>
+      <li>Clear specialization in one of the three directions</li>
+      <li>Already applying, freelancing, or offering services — don't wait</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SALARY -->
+<section class="salary-section" id="salary">
+  <h3>What you can expect after 6 months</h3>
+  <p class="section-sub">Real numbers from real people doing real work — March 2026</p>
+
+  <div class="salary-grid">
+    <div class="salary-card"><div class="salary-role">Junior AI Engineer (US)</div><div class="salary-range">$90K–$130K</div></div>
+    <div class="salary-card"><div class="salary-role">Mid-Level (3–5 years)</div><div class="salary-range">$155K–$200K</div></div>
+    <div class="salary-card"><div class="salary-role">Senior Roles</div><div class="salary-range">$195K–$350K+</div></div>
+    <div class="salary-card"><div class="salary-role">Glassdoor Avg (Mar 2026)</div><div class="salary-range">$184,757</div></div>
+    <div class="salary-card"><div class="salary-role">Freelance · Agent Dev</div><div class="salary-range">$175–$300/hr</div></div>
+    <div class="salary-card"><div class="salary-role">Freelance · RAG Implementation</div><div class="salary-range">$150–$250/hr</div></div>
+    <div class="salary-card"><div class="salary-role">Freelance · LLM Integration</div><div class="salary-range">$125–$200/hr</div></div>
+    <div class="salary-card"><div class="salary-role">Freelance 25hr/wk @ $150/hr</div><div class="salary-range">$195K/yr</div></div>
+  </div>
+
+  <p class="salary-note">
+    Mid-level band growing fastest at 9.2% YoY — companies desperately need people who can ship production AI without constant supervision. Only 1% of companies are considered "AI mature" which means 99% still need help. Job postings grew 25% YoY. PwC found a 56% wage premium for roles requiring AI skills. US Bureau of Labor Statistics projects 26% job growth through 2034.
+    <br><br>
+    Consulting rates: $300–$5,000 to set up an AI agent for a business · $500–$2,000/month for AI content management · $1,000–$4,000 to automate customer support · $500–$2,000 for cold outreach setup.
+    <br><br>
+    One developer on Reddit built a document summarization tool for a legal firm in two weeks and made $8,000.
+  </p>
+</section>
+
+<!-- CONCLUSION -->
+<section class="conclusion" id="conclusion">
+  <h3>What to actually take away from all this</h3>
+  <div class="conclusion-points">
+    <div class="conclusion-point">
+      <div class="cp-num">TAKEAWAY 01</div>
+      <p>Pick one project from each month and BUILD it. Not read about it. Not watch a tutorial. Build it, break it, fix it, deploy it, put it on GitHub. The engineers who get hired show what they've built, not what they've studied.</p>
+    </div>
+    <div class="conclusion-point">
+      <div class="cp-num">TAKEAWAY 02</div>
+      <p>Start sharing what you learn. Write about it on X, LinkedIn, anywhere. Teaching is the fastest way to learn and it builds your reputation at the same time. The best opportunities come from people who were visible, not from people who applied to 500 job listings.</p>
+    </div>
+    <div class="conclusion-point">
+      <div class="cp-num">TAKEAWAY 03</div>
+      <p>Don't wait until you feel ready. You will never feel ready. The gap between "I'm learning" and "I'm building" is where most people get stuck forever. Start applying and freelancing the moment you have working projects — even if they're not perfect.</p>
+    </div>
+    <div class="conclusion-point">
+      <div class="cp-num">TAKEAWAY 04</div>
+      <p>The market doesn't reward perfection. It rewards people who can ship. 6 months is enough to change everything if you actually put in the work. Just never stop building and never stop learning.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>AI Engineer Roadmap · 6 Months · 2026 Edition · 40+ hours of research · Every skill, every resource, every link from the original guide</p>
+</footer>
+
+<script>
+  const allSections = document.querySelectorAll('.month, .salary-section, .conclusion');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.04 });
+  allSections.forEach(s => observer.observe(s));
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.style.color = '');
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) active.style.color = '#e8e8e8';
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>
